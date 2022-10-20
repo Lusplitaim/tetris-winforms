@@ -28,6 +28,31 @@ namespace Tetris
 
             return tetrisBlock;
         }
+
+        public static TetrisBlock CreateSquare(int rowHeight, int columnWidth)
+        {
+            TetrisBlock tetrisBlock = new();
+
+            int columnCount = 2;
+            int rowCount = 2;
+
+            for (int col = 0; col < columnCount; col++)
+            {
+                for (int row = 0; row < rowCount; row++)
+                {
+                    TetrisCellSpecs cellSpecs1 = new()
+                    {
+                        Row = row,
+                        Column = col,
+                        Width = columnWidth,
+                        Height = rowHeight,
+                    };
+                    tetrisBlock.Cells.Add(cellSpecs1);
+                }
+            }
+
+            return tetrisBlock;
+        }
     }
 
     internal struct TetrisCellSpecs

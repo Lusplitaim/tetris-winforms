@@ -20,37 +20,34 @@ namespace Tetris
 
         private Timer _timer;
 
+        private TetrisField _field;
+
+        private Bitmap _bmp;
+
         private TetrisBlock _fallingBlock;
         private List<TetrisCellSpecs> _groundedCells = new();
-
-        private GridDrawer _gridDrawer;
-
-        private int _currentRow = 0;
 
         public PlaygroundForm()
         {
             InitializeComponent();
-            InitGridDrawer();
-            InitBlock();
+            InitField();
+            InitFallingBlock();
             InitTimer();
         }
 
-        private void InitBlock()
+        private void InitField()
         {
-            _fallingBlock = TetrisBlock
-                .CreateLine(4, _cellHeight, _cellWidth);
+            TetrisFieldSpecs fieldSpecs = new() 
+            { RowCount = _rowCount, ColumnCount = _columnCount, 
+                ColumnWidth = _cellWidth, RowHeight = _cellHeight };
+
+            _field = new TetrisField(fieldSpecs);
         }
 
-        private void InitGridDrawer()
+        private void InitFallingBlock()
         {
-            GridStyle gridStyle = new()
-            {
-                RowCount = _rowCount,
-                ColumnCount = _columnCount,
-                CellHeight = _cellHeight,
-                CellWidth = _cellWidth,
-            };
-            _gridDrawer = new GridDrawer(gridStyle);
+            _fallingBlock = TetrisBlock
+                .CreateSquare(_cellHeight, _cellWidth);
         }
 
         private void InitTimer()
@@ -66,6 +63,20 @@ namespace Tetris
             DrawPlayground();
 
             ShiftFallingBlock();
+        }
+
+        private void DrawPlayground()
+        {
+            if (_bmp is not null) _bmp.Dispose();
+
+            _bmp = _field.DrawField(_fallingBlock, _groundedCells);
+
+            UpdatePlayground(_bmp);
+        }
+
+        private void ShiftFallingBlock()
+        {
+            BlockTransformer.MoveDown(_fallingBlock);
 
             bool isAtBottom = _fallingBlock.Cells.Any(cellSpecs =>
             {
@@ -79,8 +90,6 @@ namespace Tetris
             });
 
             isAtBottom = isAtBottom || tmpBlocks.Intersect(_groundedCells).Any();
-            //_fallingBlock.Cells.Intersect(_groundedCells).Any()
-
 
             if (isAtBottom)
             {
@@ -89,57 +98,6 @@ namespace Tetris
                 _fallingBlock = TetrisBlock
                     .CreateLine(4, _cellHeight, _cellWidth);
             }
-        }
-
-        private void DrawPlayground()
-        {
-            Bitmap bmp = new(Width, Height);
-
-            _gridDrawer.DrawGrid(bmp);
-
-            DrawFallingBlock(bmp);
-
-            DrawGroundedCells(bmp);
-
-            UpdatePlayground(bmp);
-        }
-
-        private void DrawGroundedCells(Bitmap bmp)
-        {
-            foreach (var cellSpecs in _groundedCells)
-            {
-                Point upperLeftPoint = new(cellSpecs.X, cellSpecs.Y);
-                FillCell(bmp, upperLeftPoint);
-            }
-        }
-
-        private void ShiftFallingBlock()
-        {
-            for (int i = 0; i < _fallingBlock.Cells.Count(); i++)
-            {
-                var cellSpecs = _fallingBlock.Cells[i];
-                if (++cellSpecs.Row >= _rowCount) cellSpecs.Row = _rowCount - 1;
-                _fallingBlock.Cells[i] = cellSpecs;
-            }
-        }
-
-        private void DrawFallingBlock(Bitmap bmp)
-        {
-            for (int i = 0; i < _fallingBlock.Cells.Count(); i++)
-            {
-                var cellSpecs = _fallingBlock.Cells[i];
-                Point upperLeftPoint = new(cellSpecs.X, cellSpecs.Y);
-                FillCell(bmp, upperLeftPoint);
-            }
-        }
-
-        private void FillCell(Bitmap bmp, Point upperLeft)
-        {
-            using var graphics = Graphics.FromImage(bmp);
-            Brush brush = Brushes.Yellow;
-
-            graphics.FillRectangle(brush,
-                new(upperLeft.X + 1, upperLeft.Y + 1, _cellWidth - 1, _cellHeight - 1));
         }
 
         private void UpdatePlayground(Bitmap bmp)
@@ -169,18 +127,18 @@ namespace Tetris
             switch (e.KeyCode)
             {
                 case Keys.Right:
-                    TetrisBlockTransformer.MoveBlockToRight(_fallingBlock);
+                    BlockTransformer.MoveToRight(_fallingBlock);
                     if (CheckFallingBlockBoundary())
                     {
-                        TetrisBlockTransformer.MoveBlockToLeft(_fallingBlock);
+                        BlockTransformer.MoveToLeft(_fallingBlock);
                     }
                     break;
 
                 case Keys.Left:
-                    TetrisBlockTransformer.MoveBlockToLeft(_fallingBlock);
+                    BlockTransformer.MoveToLeft(_fallingBlock);
                     if (CheckFallingBlockBoundary())
                     {
-                        TetrisBlockTransformer.MoveBlockToRight(_fallingBlock);
+                        BlockTransformer.MoveToRight(_fallingBlock);
                     }
                     break;
 
@@ -188,6 +146,7 @@ namespace Tetris
                     break;
 
                 case Keys.Down:
+                    ShiftFallingBlock();
                     break;
             }
 
