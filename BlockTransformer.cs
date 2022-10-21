@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-    internal static class BlockTransformer
+    internal class BlockTransformer
     {
-        internal static void MoveToRight(TetrisBlock block)
+        internal void MoveToRight(TetrisBlock block)
         {
             for (int i = 0; i < block.Cells.Count(); i++)
             {
@@ -18,7 +18,7 @@ namespace Tetris
             }
         }
 
-        internal static void MoveToLeft(TetrisBlock block)
+        internal void MoveToLeft(TetrisBlock block)
         {
             for (int i = 0; i < block.Cells.Count(); i++)
             {
@@ -28,7 +28,7 @@ namespace Tetris
             }
         }
 
-        internal static void MoveUp(TetrisBlock block)
+        internal void MoveUp(TetrisBlock block)
         {
             for (int i = 0; i < block.Cells.Count(); i++)
             {
@@ -38,7 +38,7 @@ namespace Tetris
             }
         }
 
-        internal static void MoveDown(TetrisBlock block)
+        internal void MoveDown(TetrisBlock block)
         {
             for (int i = 0; i < block.Cells.Count(); i++)
             {

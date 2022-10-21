@@ -24,14 +24,10 @@ namespace Tetris
 
         private Bitmap _bmp;
 
-        private TetrisBlock _fallingBlock;
-        private List<TetrisCellSpecs> _groundedCells = new();
-
         public PlaygroundForm()
         {
             InitializeComponent();
             InitField();
-            InitFallingBlock();
             InitTimer();
         }
 
@@ -42,12 +38,6 @@ namespace Tetris
                 ColumnWidth = _cellWidth, RowHeight = _cellHeight };
 
             _field = new TetrisField(fieldSpecs);
-        }
-
-        private void InitFallingBlock()
-        {
-            _fallingBlock = TetrisBlock
-                .CreateSquare(_cellHeight, _cellWidth);
         }
 
         private void InitTimer()
@@ -69,35 +59,14 @@ namespace Tetris
         {
             if (_bmp is not null) _bmp.Dispose();
 
-            _bmp = _field.DrawField(_fallingBlock, _groundedCells);
+            _bmp = _field.DrawField();
 
             UpdatePlayground(_bmp);
         }
 
         private void ShiftFallingBlock()
         {
-            BlockTransformer.MoveDown(_fallingBlock);
-
-            bool isAtBottom = _fallingBlock.Cells.Any(cellSpecs =>
-            {
-                return cellSpecs.Row == (_rowCount - 1);
-            });
-
-            var tmpBlocks = _fallingBlock.Cells.Select(c =>
-            {
-                c.Row++;
-                return c;
-            });
-
-            isAtBottom = isAtBottom || tmpBlocks.Intersect(_groundedCells).Any();
-
-            if (isAtBottom)
-            {
-                _groundedCells.AddRange(_fallingBlock.Cells);
-
-                _fallingBlock = TetrisBlock
-                    .CreateLine(4, _cellHeight, _cellWidth);
-            }
+            _field.ShiftFallingBlock();
         }
 
         private void UpdatePlayground(Bitmap bmp)
@@ -114,32 +83,16 @@ namespace Tetris
             FormBorderStyle = FormBorderStyle.FixedSingle;
         }
 
-        private bool CheckFallingBlockBoundary()
-        {
-            return _fallingBlock.Cells.Any((cellSpec) =>
-            {
-                return cellSpec.Column < 0 || cellSpec.Column >= _columnCount;
-            });
-        }
-
         private void form_KeyDown(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
                 case Keys.Right:
-                    BlockTransformer.MoveToRight(_fallingBlock);
-                    if (CheckFallingBlockBoundary())
-                    {
-                        BlockTransformer.MoveToLeft(_fallingBlock);
-                    }
+                    _field.MoveBlockToRight();
                     break;
 
                 case Keys.Left:
-                    BlockTransformer.MoveToLeft(_fallingBlock);
-                    if (CheckFallingBlockBoundary())
-                    {
-                        BlockTransformer.MoveToRight(_fallingBlock);
-                    }
+                    _field.MoveBlockToLeft();
                     break;
 
                 case Keys.Up:
