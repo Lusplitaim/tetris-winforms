@@ -15,6 +15,7 @@ namespace Tetris
 
         private GridDrawer _gridDrawer;
         private BlockDrawer _blockDrawer;
+        private List<BasicBlockDelegate> _blockDelegates;
 
         private BlockTransformer _blockTransformer;
 
@@ -24,13 +25,17 @@ namespace Tetris
             InitGridDrawer();
             InitBlockDrawer();
             _blockTransformer = new BlockTransformer();
+            _blockDelegates = BlockCreator.CreateBasicBlocks().ToList();
             CreateFallingBlock();
         }
 
         private void CreateFallingBlock()
         {
-            _fallingBlock = TetrisBlock
-                .CreateLine(5, _fieldSpecs.RowHeight, _fieldSpecs.ColumnWidth);
+            Random random = new();
+            var index = random.Next(0, _blockDelegates.Count - 1);
+
+            _fallingBlock = _blockDelegates[index]
+                (_fieldSpecs.RowHeight, _fieldSpecs.ColumnWidth);
         }
 
         public Bitmap DrawField()
