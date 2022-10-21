@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Timer = System.Windows.Forms.Timer;
 
 namespace Tetris
@@ -52,7 +53,19 @@ namespace Tetris
         {
             DrawPlayground();
 
-            ShiftFallingBlock();
+            if (!TryShiftingFallingBlock())
+            {
+                _timer.Stop();
+                ShowEndingMessage();
+            }
+        }
+
+        private void ShowEndingMessage()
+        {
+            string message = "The Game is over";
+            string caption = "Info";
+            MessageBoxButtons buttons = MessageBoxButtons.OK;
+            MessageBox.Show(message, caption, buttons);
         }
 
         private void DrawPlayground()
@@ -64,9 +77,9 @@ namespace Tetris
             UpdatePlayground(_bmp);
         }
 
-        private void ShiftFallingBlock()
+        private bool TryShiftingFallingBlock()
         {
-            _field.ShiftFallingBlock();
+            return _field.TryShiftingFallingBlock();
         }
 
         private void UpdatePlayground(Bitmap bmp)
@@ -99,7 +112,7 @@ namespace Tetris
                     break;
 
                 case Keys.Down:
-                    ShiftFallingBlock();
+                    TryShiftingFallingBlock();
                     break;
             }
 

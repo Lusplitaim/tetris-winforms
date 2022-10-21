@@ -15,7 +15,7 @@ namespace Tetris
 
         private GridDrawer _gridDrawer;
         private BlockDrawer _blockDrawer;
-        private List<BasicBlockDelegate> _blockDelegates;
+        private List<BasicBlockDelegate> _blockCreators;
 
         private BlockTransformer _blockTransformer;
 
@@ -25,16 +25,16 @@ namespace Tetris
             InitGridDrawer();
             InitBlockDrawer();
             _blockTransformer = new BlockTransformer();
-            _blockDelegates = BlockCreator.CreateBasicBlocks().ToList();
+            _blockCreators = BlockCreator.CreateBasicBlocks().ToList();
             CreateFallingBlock();
         }
 
         private void CreateFallingBlock()
         {
             Random random = new();
-            var index = random.Next(0, _blockDelegates.Count - 1);
+            var index = random.Next(0, _blockCreators.Count - 1);
 
-            _fallingBlock = _blockDelegates[index]
+            _fallingBlock = _blockCreators[index]
                 (_fieldSpecs.RowHeight, _fieldSpecs.ColumnWidth);
         }
 
@@ -68,13 +68,20 @@ namespace Tetris
             _blockDrawer = new BlockDrawer();
         }
 
-        public void ShiftFallingBlock()
+        public bool TryShiftingFallingBlock()
         {
             _blockTransformer.MoveDown(_fallingBlock);
 
-            if (CheckFallingBlockBoundary())
+            bool isOutsideOfBoundary = CheckFallingBlockBoundary();
+            if (isOutsideOfBoundary)
             {
                 _blockTransformer.MoveUp(_fallingBlock);
+
+                bool isFieldOverflowed = CheckForOverflow();
+                if (isFieldOverflowed)
+                {
+                    return false;
+                }
 
                 _groundedCells.AddRange(_fallingBlock.Cells);
 
@@ -82,6 +89,13 @@ namespace Tetris
             }
 
             if (CheckForFullGroundRows()) RemoveFullRows();
+
+            return true;
+        }
+
+        private bool CheckForOverflow()
+        {
+            return _fallingBlock.Cells.Any(c => c.Row == 0);
         }
 
         private bool CheckForBoundaryViolation()
