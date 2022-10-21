@@ -16,18 +16,23 @@ namespace Tetris
     {
         private int _cellHeight = 20;
         private int _cellWidth = 20;
-        private int _columnCount = 15;
-        private int _rowCount = 20;
+        private int _columnCount;
+        private int _rowCount;
 
         private Timer _timer;
+        private int _timerInterval = 500;
 
         private TetrisField _field;
 
         private Bitmap _bmp;
 
-        public PlaygroundForm()
+        public PlaygroundForm(int rowCount, int columnCount)
         {
             InitializeComponent();
+
+            _rowCount = rowCount;
+            _columnCount = columnCount;
+
             InitField();
             InitTimer();
         }
@@ -44,7 +49,7 @@ namespace Tetris
         private void InitTimer()
         {
             _timer = new();
-            _timer.Interval = 500;
+            _timer.Interval = _timerInterval;
             _timer.Enabled = true;
             _timer.Tick += timer_Tick;
         }

@@ -9,7 +9,8 @@ namespace Tetris
 
         private void btnStartGame_Click(object sender, EventArgs e)
         {
-            PlaygroundForm playground = new();
+            PlaygroundForm playground = 
+                new((int)RowCountUpDown.Value, (int)ColumnCountUpDown.Value);
             playground.ShowDialog();
         }
     }
