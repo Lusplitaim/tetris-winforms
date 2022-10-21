@@ -29,7 +29,6 @@ namespace Tetris
         public PlaygroundForm(int rowCount, int columnCount)
         {
             InitializeComponent();
-
             _rowCount = rowCount;
             _columnCount = columnCount;
 

@@ -15,7 +15,7 @@ namespace Tetris
             _gridStyle = gridStyle;
         }
 
-        public void DrawGrid(Bitmap bmp)
+        internal void DrawGrid(Bitmap bmp)
         {
             using var graphics = Graphics.FromImage(bmp);
             using Pen pen = new(Color.Black);

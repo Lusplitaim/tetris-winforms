@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace Tetris
         public int Column { get; set; }
         public int Width { get; init; }
         public int Height { get; init; }
+        public int ArgbColor { get; init; }
 
         public int X
         {

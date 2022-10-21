@@ -110,7 +110,8 @@ namespace Tetris
 
         private bool CheckForCollision()
         {
-            bool isCollidedWithGroundCells = _fallingBlock.Cells.Intersect(_groundedCells).Any();
+            bool isCollidedWithGroundCells = _fallingBlock.Cells
+                .Intersect(_groundedCells, new TetrisCellSpecsEqualityComparer()).Any();
             return isCollidedWithGroundCells;
         }
 

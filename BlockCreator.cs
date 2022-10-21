@@ -31,66 +31,78 @@ namespace Tetris
 
         private static TetrisBlock CreateClevelandZ(int rowHeight, int columnWidth)
         {
+            int argbColor = Color.Red.ToArgb();
+
             List<TetrisCellSpecs> cells = new();
 
-            cells.Add(new() { Row = 0, Column = 0, Height = rowHeight, Width = columnWidth });
-            cells.Add(new() { Row = 0, Column = 1, Height = rowHeight, Width = columnWidth });
-            cells.Add(new() { Row = 1, Column = 1, Height = rowHeight, Width = columnWidth });
-            cells.Add(new() { Row = 1, Column = 2, Height = rowHeight, Width = columnWidth });
+            cells.Add(new() { Row = 0, Column = 0, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new() { Row = 0, Column = 1, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new() { Row = 1, Column = 1, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new() { Row = 1, Column = 2, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
 
             return CreateBlockFromCells(cells);
         }
 
         private static TetrisBlock CreateRhodeIslandZ(int rowHeight, int columnWidth)
         {
+            int argbColor = Color.Green.ToArgb();
+
             List<TetrisCellSpecs> cells = new();
 
-            cells.Add(new() { Row = 1, Column = 0, Height = rowHeight, Width = columnWidth });
-            cells.Add(new() { Row = 1, Column = 1, Height = rowHeight, Width = columnWidth });
-            cells.Add(new() { Row = 0, Column = 1, Height = rowHeight, Width = columnWidth });
-            cells.Add(new() { Row = 0, Column = 2, Height = rowHeight, Width = columnWidth });
+            cells.Add(new() { Row = 1, Column = 0, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new() { Row = 1, Column = 1, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new() { Row = 0, Column = 1, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new() { Row = 0, Column = 2, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
 
             return CreateBlockFromCells(cells);
         }
 
         private static TetrisBlock CreateTeewee(int rowHeight, int columnWidth)
         {
+            int argbColor = Color.Violet.ToArgb();
+
             List<TetrisCellSpecs> cells = new();
 
-            cells.Add(new() { Row = 1, Column = 0, Height = rowHeight, Width = columnWidth });
-            cells.Add(new() { Row = 1, Column = 1, Height = rowHeight, Width = columnWidth });
-            cells.Add(new() { Row = 1, Column = 2, Height = rowHeight, Width = columnWidth });
-            cells.Add(new() { Row = 0, Column = 1, Height = rowHeight, Width = columnWidth });
+            cells.Add(new() { Row = 1, Column = 0, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new() { Row = 1, Column = 1, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new() { Row = 1, Column = 2, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new() { Row = 0, Column = 1, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
 
             return CreateBlockFromCells(cells);
         }
 
         private static TetrisBlock CreateBlueRicky(int rowHeight, int columnWidth)
         {
+            int argbColor = Color.Blue.ToArgb();
+
             List<TetrisCellSpecs> cells = new();
 
-            cells.Add(new() { Row = 0, Column = 0, Height = rowHeight, Width = columnWidth });
-            cells.Add(new() { Row = 1, Column = 0, Height = rowHeight, Width = columnWidth });
-            cells.Add(new() { Row = 1, Column = 1, Height = rowHeight, Width = columnWidth });
-            cells.Add(new() { Row = 1, Column = 2, Height = rowHeight, Width = columnWidth });
+            cells.Add(new() { Row = 0, Column = 0, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new() { Row = 1, Column = 0, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new() { Row = 1, Column = 1, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new() { Row = 1, Column = 2, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
 
             return CreateBlockFromCells(cells);
         }
 
         private static TetrisBlock CreateOrangeRicky(int rowHeight, int columnWidth)
         {
+            int argbColor = Color.Orange.ToArgb();
+
             List<TetrisCellSpecs> cells = new();
 
-            cells.Add(new(){ Row = 1, Column = 0, Height = rowHeight, Width = columnWidth });
-            cells.Add(new(){ Row = 1, Column = 1, Height = rowHeight, Width = columnWidth });
-            cells.Add(new(){ Row = 1, Column = 2, Height = rowHeight, Width = columnWidth });
-            cells.Add(new(){ Row = 0, Column = 2, Height = rowHeight, Width = columnWidth });
+            cells.Add(new(){ Row = 1, Column = 0, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new(){ Row = 1, Column = 1, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new(){ Row = 1, Column = 2, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
+            cells.Add(new(){ Row = 0, Column = 2, Height = rowHeight, Width = columnWidth, ArgbColor = argbColor });
 
             return CreateBlockFromCells(cells);
         }
 
         private static TetrisBlock CreateHero(int rowHeight, int columnWidth)
         {
+            int argbColor = Color.LightGray.ToArgb();
+
             TetrisBlock tetrisBlock = new();
 
             int cellsCount = 4;
@@ -103,6 +115,7 @@ namespace Tetris
                     Column = i,
                     Width = columnWidth,
                     Height = rowHeight,
+                    ArgbColor = argbColor
                 };
                 tetrisBlock.Cells.Add(cellSpecs);
             }
@@ -112,6 +125,8 @@ namespace Tetris
 
         private static TetrisBlock CreateSmashboy(int rowHeight, int columnWidth)
         {
+            int argbColor = Color.Yellow.ToArgb();
+
             TetrisBlock tetrisBlock = new();
 
             int columnCount = 2;
@@ -127,6 +142,7 @@ namespace Tetris
                         Column = col,
                         Width = columnWidth,
                         Height = rowHeight,
+                        ArgbColor= argbColor
                     };
                     tetrisBlock.Cells.Add(cellSpecs);
                 }
