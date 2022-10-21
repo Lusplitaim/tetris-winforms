@@ -8,7 +8,7 @@ namespace Tetris
 {
     internal class TetrisBlock
     {
-        public List<TetrisCellSpecs> Cells { get; } = new List<TetrisCellSpecs>();
+        public List<TetrisCellSpecs> Cells { get; internal set; } = new List<TetrisCellSpecs>();
 
         public static TetrisBlock CreateLine(int cellsCount, int rowHeight, int columnWidth)
         {

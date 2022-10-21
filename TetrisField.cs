@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-    internal class TetrisField
+    public class TetrisField
     {
         private TetrisFieldSpecs _fieldSpecs;
 
@@ -18,7 +18,7 @@ namespace Tetris
 
         private BlockTransformer _blockTransformer;
 
-        internal TetrisField(TetrisFieldSpecs fieldSpecs)
+        public TetrisField(TetrisFieldSpecs fieldSpecs)
         {
             _fieldSpecs = fieldSpecs;
             InitGridDrawer();
@@ -33,7 +33,7 @@ namespace Tetris
                 .CreateLine(5, _fieldSpecs.RowHeight, _fieldSpecs.ColumnWidth);
         }
 
-        internal Bitmap DrawField()
+        public Bitmap DrawField()
         {
             Bitmap bmp = new(_fieldSpecs.Width, _fieldSpecs.Height);
 
@@ -63,33 +63,36 @@ namespace Tetris
             _blockDrawer = new BlockDrawer();
         }
 
-        internal void ShiftFallingBlock()
+        public void ShiftFallingBlock()
         {
             _blockTransformer.MoveDown(_fallingBlock);
 
-            bool isAtBottom = _fallingBlock.Cells.Any(cellSpecs =>
+            if (CheckFallingBlockBoundary())
             {
-                return cellSpecs.Row == (_fieldSpecs.RowCount - 1);
-            });
+                _blockTransformer.MoveUp(_fallingBlock);
 
-            var tmpBlocks = _fallingBlock.Cells.Select(c =>
-            {
-                c.Row++;
-                return c;
-            });
-
-            bool isCollidedWithGroundCells = tmpBlocks.Intersect(_groundedCells).Any();
-
-            isAtBottom = isAtBottom || isCollidedWithGroundCells;
-
-            if (isAtBottom)
-            {
                 _groundedCells.AddRange(_fallingBlock.Cells);
 
                 CreateFallingBlock();
             }
 
             if (CheckForFullGroundRows()) RemoveFullRows();
+        }
+
+        private bool CheckForBoundaryViolation()
+        {
+            bool isAtBottom = _fallingBlock.Cells.Any(cellSpecs =>
+            {
+                return cellSpecs.Row == _fieldSpecs.RowCount
+                || cellSpecs.Column < 0 || cellSpecs.Column >= _fieldSpecs.ColumnCount;
+            });
+            return isAtBottom;
+        }
+
+        private bool CheckForCollision()
+        {
+            bool isCollidedWithGroundCells = _fallingBlock.Cells.Intersect(_groundedCells).Any();
+            return isCollidedWithGroundCells;
         }
 
         private bool CheckForFullGroundRows()
@@ -123,7 +126,7 @@ namespace Tetris
             }
         }
 
-        internal void MoveBlockToLeft()
+        public void MoveBlockToLeft()
         {
             _blockTransformer.MoveToLeft(_fallingBlock);
             if (CheckFallingBlockBoundary())
@@ -132,7 +135,7 @@ namespace Tetris
             }
         }
 
-        internal void MoveBlockToRight()
+        public void MoveBlockToRight()
         {
             _blockTransformer.MoveToRight(_fallingBlock);
             if (CheckFallingBlockBoundary())
@@ -143,30 +146,26 @@ namespace Tetris
 
         private bool CheckFallingBlockBoundary()
         {
-            bool isCollidedWithGroundBlocks = _fallingBlock.Cells
-                .Intersect(_groundedCells).Any();
+            bool isCollidedWithGroundBlocks = CheckForCollision();
 
-            bool isOutOfBoundary = _fallingBlock.Cells.Any((cellSpec) =>
-            {
-                return cellSpec.Column < 0 || cellSpec.Column >= _fieldSpecs.ColumnCount;
-            });
+            bool isOutOfBoundary = CheckForBoundaryViolation();
 
             return isCollidedWithGroundBlocks || isOutOfBoundary;
         }
     }
 
-    internal struct TetrisFieldSpecs
+    public struct TetrisFieldSpecs
     {
-        internal int RowCount { get; init; }
-        internal int ColumnCount { get; init; }
-        internal int ColumnWidth { get; init; }
-        internal int RowHeight { get; init; }
+        public int RowCount { get; init; }
+        public int ColumnCount { get; init; }
+        public int ColumnWidth { get; init; }
+        public int RowHeight { get; init; }
 
-        internal int Width
+        public int Width
         {
             get => ColumnCount * ColumnWidth;
         }
-        internal int Height
+        public int Height
         {
             get => RowCount * RowHeight;
         }
