@@ -26,6 +26,9 @@ namespace Tetris
 
         private Bitmap _bmp;
 
+        private const int WIDTH_PADDING = 18;
+        private const int HEIGHT_PADDING = 47;
+
         public PlaygroundForm(int rowCount, int columnCount)
         {
             InitializeComponent();
@@ -94,8 +97,8 @@ namespace Tetris
 
         private void Playground_Load(object sender, EventArgs e)
         {
-            Width = (_columnCount * _cellWidth) + 18;
-            Height = (_rowCount * _cellHeight) + 47;
+            Width = (_columnCount * _cellWidth) + WIDTH_PADDING;
+            Height = (_rowCount * _cellHeight) + HEIGHT_PADDING;
 
             FormBorderStyle = FormBorderStyle.FixedSingle;
         }
@@ -121,6 +124,12 @@ namespace Tetris
             }
 
             DrawPlayground();
+        }
+
+        private void form_Close(object sender, FormClosedEventArgs e)
+        {
+            _timer.Stop();
+            _timer.Dispose();
         }
     }
 }

@@ -49,6 +49,7 @@
             this.Controls.Add(this.PlaygroundBox);
             this.Name = "PlaygroundForm";
             this.Text = "PlaygroundForm";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.form_Close);
             this.Load += new System.EventHandler(this.Playground_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.form_KeyDown);
             ((System.ComponentModel.ISupportInitialize)(this.PlaygroundBox)).EndInit();
