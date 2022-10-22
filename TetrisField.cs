@@ -88,7 +88,7 @@ namespace Tetris
                 CreateFallingBlock();
             }
 
-            if (CheckForFullGroundRows()) RemoveFullRows();
+            RemoveFullRows();
 
             return true;
         }
@@ -115,17 +115,6 @@ namespace Tetris
             return isCollidedWithGroundCells;
         }
 
-        private bool CheckForFullGroundRows()
-        {
-            var groundRowStats = _groundedCells.GroupBy(c => c.Row)
-                .Select(c => new { Row = c.Key, ColumnCount = c.Count() })
-                .OrderBy(s => s.Row);
-
-            var rowsForDeletion = groundRowStats.Where(s => s.ColumnCount == _fieldSpecs.ColumnCount);
-
-            return rowsForDeletion.Any();
-        }
-
         private void RemoveFullRows()
         {
             var groundRowStats = _groundedCells.GroupBy(c => c.Row)
@@ -133,6 +122,8 @@ namespace Tetris
                 .OrderBy(s => s.Row);
 
             var rowsForDeletion = groundRowStats.Where(s => s.ColumnCount == _fieldSpecs.ColumnCount);
+
+            if (!rowsForDeletion.Any()) return;
 
             foreach (var rowStat in rowsForDeletion)
             {
