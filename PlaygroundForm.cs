@@ -60,6 +60,11 @@ namespace Tetris
         {
             DrawPlayground();
 
+            ShiftFallingBlock();
+        }
+
+        private void ShiftFallingBlock()
+        {
             if (!TryShiftingFallingBlock())
             {
                 _timer.Stop();
@@ -119,7 +124,7 @@ namespace Tetris
                     break;
 
                 case Keys.Down:
-                    TryShiftingFallingBlock();
+                    ShiftFallingBlock();
                     break;
             }
 
